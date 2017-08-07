@@ -12,11 +12,13 @@
     <title>添加用户</title>
 </head>
 <body>
-    <sf:form method="post" modelAttribute="user">
+    <%--form没有写action，直接提交给当前url--%>
+    <sf:form method="post" modelAttribute="user" enctype="multipart/form-data">
         用户名：<sf:input path="username"/><br>
         密码：<sf:password path="password"/><br>
         昵称：<sf:input path="nickname"/><br>
         邮箱：<sf:input path="email"/><br>
+        文件：<input type="file" name="attach"/><br>
         <input type="submit" value="添加用户"/>
     </sf:form>
 </body>

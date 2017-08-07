@@ -1,13 +1,20 @@
 package com.yang.controller;
 
+
+import com.yang.exception.UserException;
 import com.yang.model.User;
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +45,15 @@ public class UserController {
         return "user/add";
     }
 
+
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public String add(User user){
+    public String add(User user ,MultipartFile attach,HttpServletRequest request) throws IOException{
+        //获取upload文件夹真实路径
+        String realpath = request.getSession().getServletContext().getRealPath("/resources/upload");
+        //new一个目标文件
+        File file = new File(realpath+"/"+attach.getOriginalFilename());
+        //利用FileUtils将attach的输入流copy到文件中(如果没有执行这一步，文件实际上是不存在的，上面只是new了一个File的对象)
+        FileUtils.copyInputStreamToFile(attach.getInputStream(),file);
         users.put(user.getUsername(),user);
         return "redirect:/user/users";
     }
@@ -66,5 +80,36 @@ public class UserController {
     public String delete(User user){
         users.remove(user.getUsername());
         return "redirect:/user/users";
+    }
+
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    public String login(){
+        return "user/login";
+    }
+
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public String login(User user, HttpSession session){
+        if (!users.containsKey(user.getUsername())){
+            throw new UserException("用户名不存在！");
+        }
+        User u = users.get(user.getUsername());
+        if (!u.getPassword().equals(user.getPassword())){
+            throw new UserException("密码不正确");
+        }
+        session.setAttribute("loginUser",u);
+        return "redirect:/user/users";
+    }
+
+    @RequestMapping(value = "/loginout",method = RequestMethod.GET)
+    public String loginout(HttpSession session){
+        session.invalidate();
+        return "user/login";
+    }
+
+    //局部异常处理，只能处理当前Controller中的异常
+    @ExceptionHandler(value = {UserException.class})
+    public String handlerException(UserException e, HttpServletRequest httpServletRequest){
+        httpServletRequest.setAttribute("e",e);
+        return "user/error";
     }
 }

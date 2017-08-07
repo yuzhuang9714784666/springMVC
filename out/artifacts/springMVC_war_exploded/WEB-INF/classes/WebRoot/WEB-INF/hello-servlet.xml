@@ -10,7 +10,11 @@
     <!--<bean name="/welcome" class="com.yang.controller.WelcomeController"></bean>-->
 
     <context:component-scan base-package="com.yang.controller"/>
+    <!--启动Annotation-->
     <mvc:annotation-driven />
+    <!--静态文件加载-->
+    <!--一个*表示文件夹中文件，两个*表示文件夹和子文件夹中文件-->
+    <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <!--视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -19,6 +23,11 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <!--拼接视图地址的后缀-->
         <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="5000000"/>
     </bean>
 
 </beans>

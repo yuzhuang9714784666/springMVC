@@ -25,6 +25,8 @@
       <root url="jar://$PROJECT_DIR$/WebRoot/WEB-INF/lib/spring-webmvc-portlet-4.3.0.RELEASE.jar!/" />
       <root url="jar://$PROJECT_DIR$/WebRoot/WEB-INF/lib/spring-messaging-4.3.0.RELEASE.jar!/" />
       <root url="jar://$PROJECT_DIR$/WebRoot/WEB-INF/lib/hibernate-validator-5.1.0.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WebRoot/WEB-INF/lib/org.apache.commons-fileupload-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WebRoot/WEB-INF/lib/commons-io-2.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

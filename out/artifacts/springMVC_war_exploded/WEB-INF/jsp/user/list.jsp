@@ -12,6 +12,8 @@
     <title>用户列表</title>
 </head>
 <body>
+当前用户：${loginUser.nickname}
+    <a href="loginout">退出登录</a>
     <a href="add">添加用户</a>
     <c:forEach items="${users}" var="us">
         <table>
